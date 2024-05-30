@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Taskify-Modern Task Manager</string>
+    <string name="add_task">Add Task</string>
+    <string name="add_a_new_task_here">Add a new task here</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_description">Task Description</string>
+    <string name="task_course">Task Course</string>
+    <string name="tasks_completed">Completed tasks</string>
+    <string name="amazing_job">Congrats</string>
+    <string name="delete_task">Delete</string>
+    <string name="are_you_sure">Check if ready for deletion</string>
+    <string name="delete_button">Delete bttn</string>
+    <string name="close_button">Close</string>
+    <string name="task_number">No of task</string>
+    <string name="home_top_bar">Home bar</string>
+    <string name="about_app">About</string>
 </resources>

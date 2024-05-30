@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Taskify-Modern Task Manager"
+rootProject.name = "Taskify_ModernTaskManager"
 include(":app")
