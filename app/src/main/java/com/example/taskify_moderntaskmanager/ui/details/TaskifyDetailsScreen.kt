@@ -4,19 +4,12 @@ import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -41,15 +34,21 @@ import com.example.taskify_moderntaskmanager.ui.navigation.NavigationDestination
 import com.example.taskify_moderntaskmanager.ui.navigation.TaskifyTopAppBar
 import com.example.taskify_moderntaskmanager.ui.utils.DateFormatter
 
-
-object TaskifyDetailsDestination : NavigationDestination{
+object TaskifyDetailsDestination : NavigationDestination {
     override val route = "task_details/{id}"
     override val titleRes = R.string.task_number
-    override val icon = Icons.Default.ArrowForward
+    override val icon = Icons.AutoMirrored.Filled.ArrowForward
 }
 
+/**
+ * Displays the details of a specific task.
+ *
+ * @param taskId The ID of the task to display.
+ * @param modifier Modifier to be applied to the layout.
+ * @param canNavigateBack Flag indicating if navigation back is allowed.
+ * @param onNavigateBack Function to be called when navigating back.
+ */
 @SuppressLint("ServiceCast", "UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskDetailsScreen(
     taskId: Int,
@@ -59,7 +58,6 @@ fun TaskDetailsScreen(
 ) {
     val viewModel = viewModel(modelClass = TaskifyDetailsViewModel::class.java)
     val taskDetailsUiState = viewModel.state
-    val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
 
     LaunchedEffect(key1 = true) {
@@ -153,6 +151,15 @@ fun TaskDetailsScreen(
         }
     }
 }
+
+/**
+ * A composable function that displays a row of task information.
+ *
+ * @param iconResId Resource ID of the icon to display.
+ * @param title Title of the information.
+ * @param content Content of the information.
+ * @param clipboardManager ClipboardManager instance to handle copying content to clipboard.
+ */
 @Composable
 private fun InfoRow(
     iconResId: Int,

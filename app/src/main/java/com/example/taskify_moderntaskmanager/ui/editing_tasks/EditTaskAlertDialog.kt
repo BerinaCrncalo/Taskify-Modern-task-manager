@@ -1,4 +1,4 @@
-package com.example.taskify_moderntaskmanager.ui.edit_task
+package com.example.taskify_moderntaskmanager.ui.editing_tasks
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,9 +30,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.taskify_moderntaskmanager.R
 import com.example.taskify_moderntaskmanager.data.models.Task
 import com.example.taskify_moderntaskmanager.ui.components.datePicker
+import com.example.taskify_moderntaskmanager.ui.edit_task.EditTaskViewModel
 import com.example.taskify_moderntaskmanager.ui.utils.DateFormatter
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Composable function to display an alert dialog for editing a task.
+ *
+ * @param onDismiss Callback function to handle the dismiss action of the dialog.
+ * @param onConfirm Callback function to handle the confirm action, which receives the edited task as a parameter.
+ * @param taskForEditId The ID of the task to be edited, used to fetch the task details.
+ * @param modifier Modifier for customizing the layout and appearance of the dialog and its contents.
+ */
 @Composable
 fun EditTaskAlertDialog(
     onDismiss: () -> Unit,
@@ -41,21 +48,24 @@ fun EditTaskAlertDialog(
     taskForEditId: Int,
     modifier: Modifier = Modifier,
 ) {
+    // Obtain an instance of EditTaskViewModel
     val viewModel = viewModel(modelClass = EditTaskViewModel::class.java)
     val editTaskUiState = viewModel.state
 
+    // Fetch the task details when the dialog is first displayed
     LaunchedEffect(key1 = true) {
         viewModel.getTask(taskForEditId)
     }
 
     AlertDialog(
-        containerColor = Color(0xFFECE7EE),
-        onDismissRequest = { onDismiss() },
+        containerColor = Color(0xFFECE7EE), // Background color of the dialog
+        onDismissRequest = { onDismiss() }, // Handle dismiss action
         title = {
             Text(text = "Edit Task", style = MaterialTheme.typography.bodyLarge)
         },
         text = {
             Column {
+                // Text field for editing the task title
                 OutlinedTextField(
                     label = {
                         Text(text = stringResource(R.string.task_title), style = MaterialTheme.typography.headlineMedium)
@@ -68,6 +78,7 @@ fun EditTaskAlertDialog(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                // Text field for editing the task description
                 OutlinedTextField(
                     label = {
                         Text(text = stringResource(R.string.task_description), style = MaterialTheme.typography.headlineMedium)
@@ -80,6 +91,7 @@ fun EditTaskAlertDialog(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                // Text field for editing the task course
                 OutlinedTextField(
                     label = {
                         Text(text = stringResource(R.string.task_course), style = MaterialTheme.typography.headlineMedium)
@@ -90,6 +102,7 @@ fun EditTaskAlertDialog(
                     }
                 )
 
+                // Row for selecting the due date using a date picker
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
@@ -108,6 +121,8 @@ fun EditTaskAlertDialog(
                             fontSize = 20.sp
                         )
                         Spacer(modifier = modifier.size(10.dp))
+
+                        // Show date picker when the date icon is clicked
                         val mDatePicker = datePicker(
                             context = LocalContext.current,
                             onDateSelected = {
@@ -127,6 +142,7 @@ fun EditTaskAlertDialog(
             }
         },
         confirmButton = {
+            // Button to confirm the edits and invoke the onConfirm callback with the edited task details
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF320064)),
                 onClick = {
@@ -146,6 +162,7 @@ fun EditTaskAlertDialog(
             }
         },
         dismissButton = {
+            // Button to dismiss the dialog without saving changes
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF320064)),
                 onClick = { onDismiss() }
