@@ -32,6 +32,17 @@ import androidx.compose.ui.unit.dp
 import com.example.taskify_moderntaskmanager.data.models.Task
 import com.example.taskify_moderntaskmanager.ui.utils.DateFormatter
 
+/**
+ * Composable function that represents a task card.
+ *
+ * @param task The task data to be displayed on the card.
+ * @param onCheckedChange Callback to handle checkbox state changes.
+ * @param onDelete Callback to handle task deletion.
+ * @param onEdit Callback to handle task editing.
+ * @param isChecked Flag indicating whether the task is checked.
+ * @param modifier Modifier for styling and layout customization.
+ * @param onRequestDetails Callback to request detailed information about the task.
+ */
 @Composable
 fun TaskCard(
     task: Task,
@@ -42,8 +53,10 @@ fun TaskCard(
     modifier: Modifier = Modifier,
     onRequestDetails: (Int) -> Unit
 ) {
+    // State to control the visibility of the task card
     val isVisible by remember { mutableStateOf(true) }
 
+    // Animated visibility to apply enter and exit animations
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInHorizontally(
@@ -55,21 +68,27 @@ fun TaskCard(
             animationSpec = tween(durationMillis = 500)
         )
     ) {
-        Card(shape = RoundedCornerShape(20.dp), modifier = modifier
+        // Card to display task information
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp, horizontal = 16.dp)
                 .shadow(4.dp, shape = RoundedCornerShape(20.dp))
-                .clickable { onRequestDetails(task.id) }) {
+                .clickable { onRequestDetails(task.id) }
+        ) {
             Row(
                 modifier = Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                // Checkbox for task completion status
                 Checkbox(
                     checked = isChecked,
                     onCheckedChange = { onCheckedChange(task, it) },
                     modifier = Modifier.padding(end = 16.dp)
                 )
+                // Task title
                 Text(
                     text = task.title,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
@@ -77,17 +96,20 @@ fun TaskCard(
                     textAlign = TextAlign.Start,
                     color = Color.Black
                 )
+                // Task due date
                 Text(
                     text = DateFormatter(task.dueDate),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.End,
                     color = Color.Black
                 )
+                // Edit task icon
                 Icon(
                     imageVector = Icons.Filled.Edit,
                     contentDescription = "Edit",
                     modifier = Modifier.clickable { onEdit(task.id) }
                 )
+                // Delete task icon
                 Icon(
                     imageVector = Icons.Filled.Delete,
                     contentDescription = "Delete",

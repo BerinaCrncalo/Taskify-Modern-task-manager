@@ -23,8 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.taskify_moderntaskmanager.R
 
+/**
+ * Composable function to display a screen indicating task completion.
+ * This screen shows a checkmark image and congratulatory messages.
+ */
 @Composable
 fun TaskCompletionScreen() {
+    // Load the checkmark image from resources
     val checkImage = painterResource(id = R.drawable.checkimage)
 
     Column(
@@ -34,6 +39,7 @@ fun TaskCompletionScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        // Display the checkmark image
         Image(
             painter = checkImage,
             contentDescription = null,
@@ -42,12 +48,14 @@ fun TaskCompletionScreen() {
                 .size(200.dp)
                 .clip(CircleShape)
         )
+        // Text displaying tasks completed message
         Text(
             text = stringResource(R.string.tasks_completed),
             fontSize = 20.sp,
             fontWeight = FontWeight.W900,
             modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)
         )
+        // Text displaying congratulatory message
         Text(
             text = stringResource(R.string.amazing_job),
             fontSize = 15.sp
@@ -55,8 +63,12 @@ fun TaskCompletionScreen() {
     }
 }
 
+/**
+ * Preview function for TaskCompletionScreen.
+ */
 @Preview
 @Composable
 fun TaskCompletionScreenPreview() {
+    // Preview the TaskCompletionScreen
     TaskCompletionScreen()
 }

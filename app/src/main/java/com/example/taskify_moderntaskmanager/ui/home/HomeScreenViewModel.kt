@@ -12,18 +12,25 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 
+/**
+ * ViewModel class for the HomeScreen.
+ *
+ * @param repository The repository to interact with the data source.
+ */
 class HomeScreenViewModel(
     private val repository: OfflineRepository = Graph.repository
 ) : ViewModel() {
 
+    // Mutable state for managing UI state in Composables
     var state by mutableStateOf(HomeUiState())
         private set
 
-    // Whenever ViewModel is initialized, get tasks
+    // Initialize ViewModel and fetch tasks from the repository
     init {
         getTasks()
     }
 
+    // Function to fetch tasks from the repository using coroutines
     private fun getTasks() {
         viewModelScope.launch {
             repository.getAllTasks().collectLatest {
@@ -39,6 +46,7 @@ class HomeScreenViewModel(
         }
     }
 
+    // Function to delete a task
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             repository.deleteTask(task)
@@ -48,6 +56,7 @@ class HomeScreenViewModel(
         denyDeletion()
     }
 
+    // Function to check if all tasks are finished
     private fun checkAllTasksFinished() {
         val tasks = state.tasks
         tasks.forEach {
@@ -59,6 +68,7 @@ class HomeScreenViewModel(
         }
     }
 
+    // Function to handle task checkbox state change
     fun onTaskCheckedChange(task: Task, isFinished: Boolean) {
         viewModelScope.launch {
             repository.updateTask(
@@ -67,71 +77,67 @@ class HomeScreenViewModel(
         }
     }
 
+    // Function to update a task
     fun updateTask(task: Task) {
         viewModelScope.launch {
             repository.updateTask(task = task)
         }
     }
 
+    // Function to assign a task ID for editing
     fun assignTaskForEdit(id: Int) {
         state = state.copy(taskForEditId = id)
     }
 
+    // Function to open the edit dialog
     fun openEditDialog() {
         state = state.copy(openEditDialog = true)
     }
 
+    // Function to close the edit dialog
     fun closeEditDialog() {
         state = state.copy(openEditDialog = false)
     }
 
+    // Function to open the delete dialog
     fun openDeleteDialog() {
         state = state.copy(openDeleteDialog = true)
     }
 
+    // Function to close the delete dialog
     fun closeDeleteDialog() {
         state = state.copy(openDeleteDialog = false)
     }
 
+    // Function to confirm task deletion
     fun confirmDeletion() {
         state = state.copy(confirmDelete = true)
     }
 
+    // Function to deny task deletion
     fun denyDeletion() {
         state = state.copy(confirmDelete = false)
     }
 
+    // Function to assign a task for deletion
     fun assignTaskForDeletion(task: Task) {
         state = state.copy(taskForDeletion = task)
     }
-
-    fun addTask(title: String, description: String, course: String, dueDate: Date) {
-        if (title.isBlank() || description.isBlank() || course.isBlank() || dueDate == null) {
-            // Handle invalid input
-            state = state.copy(
-                showError = true,
-                errorMessage = "All fields are required"
-            )
-        } else {
-            viewModelScope.launch {
-                repository.insertTask(
-                    Task(
-                        title = title,
-                        description = description,
-                        course = course,
-                        dueDate = dueDate,
-                        isFinished = false
-                    )
-                )
-                state = state.copy(
-                    showError = false,
-                    errorMessage = null
-                )
-            }
-        }
-    }
 }
 
+/**
+ * Data class representing the UI state of the HomeScreen.
+ *
+ * @property tasks List of tasks to display.
+ * @property allFinished Boolean indicating if all tasks are finished.
+ * @property openEditDialog Boolean indicating if the edit dialog is open.
+ * @property openDeleteDialog Boolean indicating if the delete dialog is open.
+ * @property taskForEditId ID of the task being edited.
+ * @property confirmDelete Boolean indicating if task deletion is confirmed.
+ * @property taskForDeletion Task to be deleted.
+ * @property showError Boolean indicating if an error should be shown.
+ * @property errorMessage Error message to display if showError is true.
+ */
 data class HomeUiState(
     val tasks: List<Task> = emptyList(),
     val allFinished: Boolean = true,

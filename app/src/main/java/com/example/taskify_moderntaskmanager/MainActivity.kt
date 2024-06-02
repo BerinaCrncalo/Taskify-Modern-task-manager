@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             TaskifyModernTaskManagerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    TaskifyApp(modifier = Modifier.padding(innerPadding))
+                    Modifier.padding(innerPadding).TaskifyApp()
                 }
             }
         }

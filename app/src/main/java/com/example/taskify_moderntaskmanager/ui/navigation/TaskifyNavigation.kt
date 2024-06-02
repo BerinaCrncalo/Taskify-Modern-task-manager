@@ -19,7 +19,10 @@ import com.example.taskify_moderntaskmanager.ui.info.InfoDestination
 import com.example.taskify_moderntaskmanager.ui.info.InfoScreen
 
 /**
- * Provides Navigation graph for the application.
+ * Composable function representing the navigation host for the Taskify app.
+ *
+ * @param navController The navigation controller managing navigation within the app.
+ * @param modifier Optional [Modifier] for customizing the layout of the navigation host.
  */
 @Composable
 fun TaskifyNavHost(

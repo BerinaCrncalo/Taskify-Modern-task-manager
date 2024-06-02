@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,18 +28,21 @@ import com.example.taskify_moderntaskmanager.R
 import com.example.taskify_moderntaskmanager.ui.navigation.NavigationDestination
 import com.example.taskify_moderntaskmanager.ui.navigation.TaskifyTopAppBar
 
+/**
+ * Navigation destination object for the information screen.
+ */
 object InfoDestination : NavigationDestination {
     override val route = "info"
     override val titleRes = R.string.about_app
     override val icon = Icons.Default.Info
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Composable function for displaying the information screen.
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun InfoScreen(
-    modifier: Modifier = Modifier
-) {
+fun InfoScreen() {
     Scaffold(
         topBar = {
             TaskifyTopAppBar(title = stringResource(InfoDestination.titleRes), canNavigateBack = false)
@@ -73,7 +75,6 @@ fun InfoScreen(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
                     Text(
                         text = "Berina Crncalo, Orhan Teletovic",
                         style = MaterialTheme.typography.headlineMedium,
