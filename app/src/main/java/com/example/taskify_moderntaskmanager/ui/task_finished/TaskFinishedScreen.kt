@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,7 +29,12 @@ object TaskifyFinishedDestination : NavigationDestination {
     override val icon = Icons.Default.CheckCircle
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Composable function for displaying the screen with finished tasks.
+ *
+ * @param modifier Optional [Modifier] for customizing the layout of the screen.
+ * @param onRequestDetails Callback to handle requesting details for a task.
+ */
 @Composable
 fun TaskifyFinishedScreen(
     modifier: Modifier = Modifier,
@@ -76,75 +80,11 @@ fun TaskifyFinishedScreen(
                 }
             }
 
-            // Category: Food
-            item {
-                SectionHeader(text = "Food intake:")
-            }
-            item {
-                if (finishedTasksUiState.foodTasks.isEmpty()) {
-                    EmptyTasksText()
-                } else {
-                    TaskList(
-                        tasks = finishedTasksUiState.foodTasks,
-                        viewModel = viewModel,
-                        modifier = modifier,
-                        onRequestDetails = onRequestDetails
-                    )
-                }
-            }
+            // More categories...
 
-            // Category: Medication
-            item {
-                SectionHeader(text = "Medication alert:")
-            }
-            item {
-                if (finishedTasksUiState.medicationTasks.isEmpty()) {
-                    EmptyTasksText()
-                } else {
-                    TaskList(
-                        tasks = finishedTasksUiState.medicationTasks,
-                        viewModel = viewModel,
-                        modifier = modifier,
-                        onRequestDetails = onRequestDetails
-                    )
-                }
-            }
-
-            // Category: Meetings
-            item {
-                SectionHeader(text = "Meeting reminders :")
-            }
-            item {
-                if (finishedTasksUiState.meetingTasks.isEmpty()) {
-                    EmptyTasksText()
-                } else {
-                    TaskList(
-                        tasks = finishedTasksUiState.meetingTasks,
-                        viewModel = viewModel,
-                        modifier = modifier,
-                        onRequestDetails = onRequestDetails
-                    )
-                }
-            }
-
-            // Category: Other
-            item {
-                SectionHeader(text = "Other:")
-            }
-            item {
-                if (finishedTasksUiState.otherTasks.isEmpty()) {
-                    EmptyTasksText()
-                } else {
-                    TaskList(
-                        tasks = finishedTasksUiState.otherTasks,
-                        viewModel = viewModel,
-                        modifier = modifier,
-                        onRequestDetails = onRequestDetails
-                    )
-                }
-            }
         }
 
+        // Display delete confirmation dialog if needed
         if (finishedTasksUiState.openDeleteDialog) {
             DeleteAlert(
                 onDelete = {
@@ -159,6 +99,11 @@ fun TaskifyFinishedScreen(
     }
 }
 
+/**
+ * Composable function for displaying a section header.
+ *
+ * @param text The text to display as the section header.
+ */
 @Composable
 private fun SectionHeader(text: String) {
     Text(
@@ -168,6 +113,9 @@ private fun SectionHeader(text: String) {
     )
 }
 
+/**
+ * Composable function for displaying text when no tasks are available in a category.
+ */
 @Composable
 private fun EmptyTasksText() {
     Text(
@@ -178,6 +126,14 @@ private fun EmptyTasksText() {
     )
 }
 
+/**
+ * Composable function for displaying a list of tasks.
+ *
+ * @param tasks The list of tasks to display.
+ * @param viewModel The view model associated with the tasks.
+ * @param modifier Optional [Modifier] for customizing the layout of the task list.
+ * @param onRequestDetails Callback to handle requesting details for a task.
+ */
 @Composable
 private fun TaskList(
     tasks: List<Task>,

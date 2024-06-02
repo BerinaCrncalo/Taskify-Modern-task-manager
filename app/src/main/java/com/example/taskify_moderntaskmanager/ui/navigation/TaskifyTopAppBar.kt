@@ -13,6 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Composable function for creating a custom top app bar for the Taskify app.
+ *
+ * @param title The title text to display in the app bar.
+ * @param canNavigateBack Whether the app bar should include a back button for navigation.
+ * @param modifier Optional [Modifier] for customizing the layout of the top app bar.
+ * @param navigateUp The action to perform when the back button is clicked.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskifyTopAppBar(

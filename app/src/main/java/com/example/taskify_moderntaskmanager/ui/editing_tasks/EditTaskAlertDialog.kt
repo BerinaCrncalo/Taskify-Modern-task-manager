@@ -30,7 +30,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.taskify_moderntaskmanager.R
 import com.example.taskify_moderntaskmanager.data.models.Task
 import com.example.taskify_moderntaskmanager.ui.components.datePicker
-import com.example.taskify_moderntaskmanager.ui.edit_task.EditTaskViewModel
 import com.example.taskify_moderntaskmanager.ui.utils.DateFormatter
 
 /**

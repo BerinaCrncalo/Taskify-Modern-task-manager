@@ -1,4 +1,4 @@
-package com.example.taskify_moderntaskmanager.ui.edit_task
+package com.example.taskify_moderntaskmanager.ui.editing_tasks
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
