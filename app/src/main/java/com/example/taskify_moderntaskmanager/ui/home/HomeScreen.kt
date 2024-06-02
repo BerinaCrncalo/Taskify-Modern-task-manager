@@ -80,7 +80,7 @@ fun HomeScreen(
 
     // Box composable for the overall layout
     Box(
-        modifier = modifier.fillMaxSize().background(Color.Black)
+        modifier = modifier.fillMaxSize().background(Color.White)
     ) {
         // Scaffold for setting up the basic structure of the screen
         Scaffold(
@@ -120,7 +120,7 @@ fun HomeScreen(
                         // Show a toast message when a task is moved to finished tasks
                         Toast.makeText(
                             context,
-                            "Task moved to finished tasks",
+                            "Task successfully finished",
                             Toast.LENGTH_SHORT
                         ).show()
                     },
