@@ -104,6 +104,32 @@ class HomeScreenViewModel(
     fun assignTaskForDeletion(task: Task) {
         state = state.copy(taskForDeletion = task)
     }
+
+    fun addTask(title: String, description: String, course: String, dueDate: Date) {
+        if (title.isBlank() || description.isBlank() || course.isBlank() || dueDate == null) {
+            // Handle invalid input
+            state = state.copy(
+                showError = true,
+                errorMessage = "All fields are required"
+            )
+        } else {
+            viewModelScope.launch {
+                repository.insertTask(
+                    Task(
+                        title = title,
+                        description = description,
+                        course = course,
+                        dueDate = dueDate,
+                        isFinished = false
+                    )
+                )
+                state = state.copy(
+                    showError = false,
+                    errorMessage = null
+                )
+            }
+        }
+    }
 }
 
 data class HomeUiState(
@@ -120,4 +146,6 @@ data class HomeUiState(
         description = "",
         dueDate = Date()
     ),
+    val showError: Boolean = false,
+    val errorMessage: String? = null
 )
