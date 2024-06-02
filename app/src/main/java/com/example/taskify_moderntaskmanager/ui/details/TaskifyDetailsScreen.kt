@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -67,7 +66,7 @@ fun TaskDetailsScreen(
     Scaffold(
         topBar = {
             TaskifyTopAppBar(
-                title = stringResource(TaskifyDetailsDestination.titleRes) + taskDetailsUiState.task.id.toString(),
+                title = taskDetailsUiState.task.title, // Use the task title here
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateBack
             )
@@ -77,7 +76,7 @@ fun TaskDetailsScreen(
             modifier = modifier
                 .background(Color(0xFFECE7EE))
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = 16.dp, vertical = 24.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -89,7 +88,7 @@ fun TaskDetailsScreen(
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -113,7 +112,7 @@ fun TaskDetailsScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
             InfoRow(
                 iconResId = R.drawable.baseline_info,
@@ -122,7 +121,7 @@ fun TaskDetailsScreen(
                 clipboardManager = clipboardManager
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             InfoRow(
                 iconResId = R.drawable.baseline_description,
@@ -131,7 +130,7 @@ fun TaskDetailsScreen(
                 clipboardManager = clipboardManager
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             InfoRow(
                 iconResId = R.drawable.baseline_subject,
@@ -140,7 +139,7 @@ fun TaskDetailsScreen(
                 clipboardManager = clipboardManager
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             InfoRow(
                 iconResId = R.drawable.baseline_daterange,
@@ -148,6 +147,8 @@ fun TaskDetailsScreen(
                 content = DateFormatter(taskDetailsUiState.task.dueDate),
                 clipboardManager = clipboardManager
             )
+
+            Spacer(modifier = Modifier.height(22.dp))
         }
     }
 }
