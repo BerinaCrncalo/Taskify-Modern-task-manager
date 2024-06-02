@@ -80,7 +80,7 @@ fun HomeScreen(
 
     // Box composable for the overall layout
     Box(
-        modifier = modifier.fillMaxSize().background(Color.White)
+        modifier = modifier.fillMaxSize().background(Color(0xFFECE7EE))
     ) {
         // Scaffold for setting up the basic structure of the screen
         Scaffold(
