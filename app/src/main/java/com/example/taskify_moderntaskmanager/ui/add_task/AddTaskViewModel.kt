@@ -39,6 +39,14 @@ class AddTaskViewModel(
             repository.insertTask(task)
         }
     }
+
+    fun showError(message: String) {
+        state = state.copy(errorMessage = message)
+    }
+
+    fun clearError() {
+        state = state.copy(errorMessage = "")
+    }
 }
 
 data class AddTaskUiState(
@@ -46,4 +54,5 @@ data class AddTaskUiState(
     val taskDescription: String = "",
     val taskCourse: String = "",
     val dueDate: Date = Date(),
+    val errorMessage: String = ""
 )

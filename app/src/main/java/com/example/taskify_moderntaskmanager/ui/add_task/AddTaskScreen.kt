@@ -1,30 +1,13 @@
 package com.example.taskify_moderntaskmanager.ui.add_task
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -60,6 +43,15 @@ fun AddNewTaskScreen(
     val viewModel = viewModel(modelClass = AddTaskViewModel::class.java)
     val addTaskUiState = viewModel.state
     val controller = LocalSoftwareKeyboardController.current
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(key1 = addTaskUiState.errorMessage) {
+        if (addTaskUiState.errorMessage.isNotEmpty()) {
+            snackbarHostState.showSnackbar(addTaskUiState.errorMessage)
+            viewModel.clearError()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -67,6 +59,12 @@ fun AddNewTaskScreen(
                 title = stringResource(AddNewTaskDestination.titleRes),
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateUp
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.padding(bottom = 50.dp)
             )
         }
     ) { innerPadding ->
@@ -182,15 +180,22 @@ fun AddNewTaskScreen(
             ) {
                 Button(
                     onClick = {
-                        viewModel.addTask(
-                            Task(
-                                title = addTaskUiState.taskTitle,
-                                description = addTaskUiState.taskDescription,
-                                dueDate = addTaskUiState.dueDate,
-                                course = addTaskUiState.taskCourse.uppercase(),
+                        if (addTaskUiState.taskTitle.isNotEmpty() &&
+                            addTaskUiState.taskDescription.isNotEmpty() &&
+                            addTaskUiState.taskCourse.isNotEmpty()
+                        ) {
+                            viewModel.addTask(
+                                Task(
+                                    title = addTaskUiState.taskTitle,
+                                    description = addTaskUiState.taskDescription,
+                                    dueDate = addTaskUiState.dueDate,
+                                    course = addTaskUiState.taskCourse.uppercase(),
+                                )
                             )
-                        )
-                        onNavigateUp()
+                            onNavigateUp()
+                        } else {
+                            viewModel.showError("Please fill in all fields")
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF320064)),
                     modifier = Modifier
