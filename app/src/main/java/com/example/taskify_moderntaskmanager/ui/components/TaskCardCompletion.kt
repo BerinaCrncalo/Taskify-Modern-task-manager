@@ -36,6 +36,16 @@ import androidx.compose.ui.unit.sp
 import com.example.taskify_moderntaskmanager.data.models.Task
 import com.example.taskify_moderntaskmanager.ui.utils.DateFormatter
 
+/**
+ * Composable function that represents a finished task card.
+ *
+ * @param task The task data to be displayed on the card.
+ * @param onCheckedChange Callback to handle checkbox state changes.
+ * @param onDelete Callback to handle task deletion.
+ * @param isChecked Flag indicating whether the task is checked.
+ * @param modifier Modifier for styling and layout customization.
+ * @param onRequestDetails Callback to request detailed information about the task.
+ */
 @Composable
 fun TaskCardFinished(
     task: Task,
@@ -45,8 +55,10 @@ fun TaskCardFinished(
     modifier: Modifier = Modifier,
     onRequestDetails: (Int) -> Unit
 ) {
+    // State to control the visibility of the task card
     val isVisible by remember { mutableStateOf(true) }
 
+    // Animated visibility to apply enter and exit animations
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInHorizontally(
@@ -58,6 +70,7 @@ fun TaskCardFinished(
             animationSpec = tween(durationMillis = 500)
         )
     ) {
+        // Surface to provide elevation and background color to the card
         Surface(
             shadowElevation = 4.dp,
             shape = RoundedCornerShape(20.dp),
@@ -65,10 +78,8 @@ fun TaskCardFinished(
                 .fillMaxWidth()
                 .padding(top = 10.dp, start = 20.dp, end = 20.dp)
                 .shadow(elevation = 4.dp, shape = RoundedCornerShape(20.dp))
-
-
         ) {
-
+            // Card to contain task information
             Card(
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(
@@ -76,15 +87,15 @@ fun TaskCardFinished(
                 ),
                 modifier = modifier.fillMaxWidth()
             ) {
-
+                // Row to arrange task elements horizontally
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(5.dp)
-
                 ) {
+                    // Checkbox to indicate task completion status
                     Checkbox(
                         checked = isChecked,
                         colors = CheckboxDefaults.colors(
@@ -95,6 +106,7 @@ fun TaskCardFinished(
                         }
                     )
 
+                    // Column to contain task title and handle click for details
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -102,22 +114,22 @@ fun TaskCardFinished(
                         horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.Center
                     ) {
-
+                        // Text displaying task title
                         Text(
                             text = task.title,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFFFFFFF7)
                         )
-
                     }
+
+                    // Column to display due date and handle deletion
                     Column(
-                        modifier = modifier
-                            .padding(end = 5.dp),
+                        modifier = modifier.padding(end = 5.dp),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
-
                     ) {
+                        // Text displaying "Due" label
                         Text(
                             text = "Due ",
                             fontSize = 15.sp,
@@ -125,8 +137,8 @@ fun TaskCardFinished(
                             textAlign = TextAlign.Left,
                             modifier = modifier.padding(end = 10.dp),
                             color = Color(0xFFFFFFF7)
-
                         )
+                        // Text displaying formatted due date
                         Text(
                             text = DateFormatter(task.dueDate),
                             color = Color(0xFFFFFFF7),
@@ -135,10 +147,11 @@ fun TaskCardFinished(
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = modifier.padding(end = 10.dp)
                         )
-
                     }
-                    Row() {
 
+                    // Row to contain delete icon and handle deletion
+                    Row {
+                        // Icon for deleting the task
                         Icon(
                             imageVector = Icons.Filled.Delete,
                             contentDescription = "Delete task button",
@@ -147,9 +160,7 @@ fun TaskCardFinished(
                                 .padding(end = 10.dp),
                             tint = Color(0xFFD11A2A)
                         )
-
                     }
-
                 }
             }
         }

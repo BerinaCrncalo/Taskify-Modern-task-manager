@@ -17,28 +17,38 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Composable function that displays a header with the day of the week and the current date.
+ *
+ * @param day The day of the week to be displayed in the header.
+ */
 @Composable
 fun Header(day: String) {
+    // Create a date format for formatting the current date
     val dateFormat = SimpleDateFormat("EEEE, dd MMM yyyy", Locale.getDefault())
+    // Get the current date
     val currentDate = Date()
+    // Format the current date
     val formattedDate = dateFormat.format(currentDate)
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFFECE7EE))
             .padding(start = 20.dp, top = 20.dp, bottom = 15.dp)
-    ){
-
-        Text(text = day,
+    ) {
+        // Display the day of the week
+        Text(
+            text = day,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
             fontSize = 35.sp,
-            style= MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge
         )
+        // Display the formatted current date
         Text(
             text = formattedDate,
-            Modifier.padding(5.dp,0.dp),
+            Modifier.padding(5.dp, 0.dp),
             fontWeight = FontWeight.Light,
             style = MaterialTheme.typography.headlineMedium,
             color = Color.Black
@@ -46,8 +56,12 @@ fun Header(day: String) {
     }
 }
 
+/**
+ * Preview function for the Header composable.
+ */
 @Preview
 @Composable
 fun HeaderPreview() {
+    // Preview the Header composable with a specific day
     Header(day = "Monday")
 }

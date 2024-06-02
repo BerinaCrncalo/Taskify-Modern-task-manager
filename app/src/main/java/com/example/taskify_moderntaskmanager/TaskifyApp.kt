@@ -12,12 +12,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,26 +35,33 @@ import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.exyte.animatednavbar.utils.noRippleClickable
 
+/**
+ * Composable function representing the main layout of the Taskify Modern Task Manager application.
+ *
+ * This function sets up the navigation bar, animations, and main content of the application.
+ *
+ * @param navController The navigation controller responsible for managing navigation within the app.
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskifyApp(
-    navController: NavHostController = rememberNavController(),
-    modifier: Modifier = Modifier
+fun Modifier.TaskifyApp(
+    navController: NavHostController = rememberNavController()
 ) {
+    // List of routes for the bottom navigation bar
     val bottomBarList = listOf(
         HomeDestination.route,
         TaskifyFinishedDestination.route,
         InfoDestination.route
     )
 
-    var selectedIndex by remember { mutableStateOf(0) }
+    // State to track the selected index in the bottom navigation bar
+    var selectedIndex by remember { mutableIntStateOf(0) }
 
+    // Scaffold with AnimatedNavigationBar for bottom navigation
     Scaffold(
         bottomBar = {
             AnimatedNavigationBar(
-                modifier = modifier
-                    .height(54.dp)
+                modifier = height(54.dp)
                     .padding(bottom = 6.dp, start = 6.dp, end = 6.dp),
                 selectedIndex = selectedIndex,
                 cornerRadius = shapeCornerRadius(cornerRadius = 34.dp),
@@ -64,9 +70,10 @@ fun TaskifyApp(
                 barColor = Color(0xFF320064),
                 ballColor = Color(0xFF320064),
             ) {
+                // Create bottom navigation items for each route
                 bottomBarList.forEachIndexed { index, route ->
                     Box(
-                        modifier = modifier.background(Color(0xFF320064))
+                        modifier = background(Color(0xFF320064))
                             .fillMaxSize()
                             .noRippleClickable {
                                 selectedIndex = index
@@ -75,7 +82,7 @@ fun TaskifyApp(
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            modifier = modifier.size(26.dp),
+                            modifier = size(26.dp),
                             imageVector = when (route) {
                                 HomeDestination.route -> Icons.Default.Home
                                 TaskifyFinishedDestination.route -> Icons.Default.CheckCircle
@@ -90,6 +97,7 @@ fun TaskifyApp(
             }
         }
     ) {
+        // Main content of the application
         TaskifyNavHost(navController = navController)
     }
 }
