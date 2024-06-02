@@ -12,6 +12,6 @@
     <string name="delete_button">Delete bttn</string>
     <string name="close_button">Close</string>
     <string name="task_number">No of task</string>
-    <string name="home_top_bar">Home bar</string>
+    <string name="home_top_bar">Taskify</string>
     <string name="about_app">About</string>
 </resources>

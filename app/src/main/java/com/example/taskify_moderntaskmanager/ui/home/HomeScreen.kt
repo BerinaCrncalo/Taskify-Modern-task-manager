@@ -1,6 +1,7 @@
 package com.example.taskify_moderntaskmanager.ui.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -41,9 +42,11 @@ fun HomeScreen(
     navigateToAddTask: () -> Unit,
     navigateToDetails: (Int) -> Unit,
 ) {
-    val viewModel = viewModel(modelClass = HomeScreenViewModel::class.java)
+    val viewModel: HomeScreenViewModel = viewModel()
     val homeUiState = viewModel.state
     val context = LocalContext.current
+
+    Log.d("HomeScreen", "HomeScreen initialized")
 
     if (homeUiState.confirmDelete) {
         val idDeleted = homeUiState.taskForDeletion.id

@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -32,9 +36,6 @@ import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.exyte.animatednavbar.utils.noRippleClickable
 
-/**
- * Top level composable that represents screens for the application.
- */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,14 +44,14 @@ fun TaskifyApp(
     modifier: Modifier = Modifier
 ) {
     val bottomBarList = listOf(
-        HomeDestination,
-        TaskifyFinishedDestination,
-        InfoDestination
+        HomeDestination.route,
+        TaskifyFinishedDestination.route,
+        InfoDestination.route
     )
 
     var selectedIndex by remember { mutableStateOf(0) }
 
-    Scaffold (
+    Scaffold(
         bottomBar = {
             AnimatedNavigationBar(
                 modifier = modifier
@@ -63,21 +64,26 @@ fun TaskifyApp(
                 barColor = Color(0xFF320064),
                 ballColor = Color(0xFF320064),
             ) {
-                bottomBarList.forEachIndexed {index, item ->
+                bottomBarList.forEachIndexed { index, route ->
                     Box(
                         modifier = modifier.background(Color(0xFF320064))
                             .fillMaxSize()
                             .noRippleClickable {
                                 selectedIndex = index
-                                navController.navigate(item.route) },
+                                navController.navigate(route)
+                            },
                         contentAlignment = Alignment.Center
-                    ){
+                    ) {
                         Icon(
                             modifier = modifier.size(26.dp),
-                            imageVector = item.icon,
+                            imageVector = when (route) {
+                                HomeDestination.route -> Icons.Default.Home
+                                TaskifyFinishedDestination.route -> Icons.Default.CheckCircle
+                                InfoDestination.route -> Icons.Default.Info
+                                else -> Icons.Default.Home
+                            },
                             contentDescription = null,
-                            tint = if(selectedIndex == index) Color(0xFFD9D0DE)
-                            else Color(0xFFECE7EE)
+                            tint = if (selectedIndex == index) Color(0xFFD9D0DE) else Color(0xFFECE7EE)
                         )
                     }
                 }
