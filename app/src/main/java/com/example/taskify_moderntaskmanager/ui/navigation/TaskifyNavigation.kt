@@ -14,7 +14,7 @@ import com.example.taskify_moderntaskmanager.ui.add_task.AddNewTaskScreen
 import com.example.taskify_moderntaskmanager.ui.details.TaskifyDetailsDestination
 import com.example.taskify_moderntaskmanager.ui.details.TaskDetailsScreen
 import com.example.taskify_moderntaskmanager.ui.task_finished.TaskifyFinishedDestination
-import com.example.taskify_moderntaskmanager.ui.task_finished.TaskifyFinishedScreen
+import com.example.taskify_moderntaskmanager.ui.task_finished.TaskFinishedScreen
 import com.example.taskify_moderntaskmanager.ui.info.InfoDestination
 import com.example.taskify_moderntaskmanager.ui.info.InfoScreen
 
@@ -65,7 +65,7 @@ fun TaskifyNavHost(
         }
 
         composable(route = TaskifyFinishedDestination.route) {
-            TaskifyFinishedScreen(
+            TaskFinishedScreen(
                 onRequestDetails = {
                     navController.navigate("task_details/$it")
                 }

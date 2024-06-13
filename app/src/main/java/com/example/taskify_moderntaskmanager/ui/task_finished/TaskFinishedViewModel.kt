@@ -1,33 +1,44 @@
 package com.example.taskify_moderntaskmanager.ui.task_finished
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.taskify_moderntaskmanager.data.graph.Graph
 import com.example.taskify_moderntaskmanager.data.models.Task
 import com.example.taskify_moderntaskmanager.data.repository.OfflineRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 
-class TaskifyFinishedViewModel(
+/**
+ * ViewModel responsible for managing the state of finished tasks.
+ *
+ * @property repository The repository used to interact with task data.
+ */
+class TaskFinishedViewModel(
     private val repository: OfflineRepository = Graph.repository
 ) : ViewModel() {
 
-    var state by mutableStateOf(FinishedTasksUiState())
-        private set
+    // MutableStateFlow to hold the UI state
+    private val _state = MutableStateFlow(FinishedTasksUiState())
+    val state: StateFlow<FinishedTasksUiState> = _state
 
     init {
         getTasks()
-        getTasks()
-        getfoodTasks()
-        getmeetingTasks()
-        getmedicationTasks()
+        getBillTasks()
+        getFoodTasks()
+        getMeetingTasks()
+        getMedicationTasks()
         getOtherTasks()
     }
 
+    /**
+     * Deletes a task and updates the state accordingly.
+     *
+     * @param task The task to be deleted.
+     */
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             repository.deleteTask(task)
@@ -36,98 +47,142 @@ class TaskifyFinishedViewModel(
         denyDeletion()
     }
 
+    /**
+     * Fetches other tasks (tasks that are not bills, meetings, food, or medication) and updates the state.
+     */
     fun getOtherTasks() {
         viewModelScope.launch {
             repository.getAllTasks().collectLatest { tasks ->
                 val othTasks = tasks.filter {
                     it.course !in listOf("bill", "meeting", "food", "medication") && it.isFinished
                 }
-                state = state.copy(otherTasks = othTasks)
+                _state.value = _state.value.copy(otherTasks = othTasks)
+                Log.d("TaskFinishedVM", "Other tasks: ${othTasks.size}")
             }
         }
     }
 
-    fun getbillTasks() {
+    /**
+     * Fetches bill tasks and updates the state.
+     */
+    fun getBillTasks() {
         viewModelScope.launch {
             repository.getAllTasks().collectLatest { tasks ->
                 val billTasks = tasks.filter { it.course == "bill" && it.isFinished }
-                state = state.copy(billTasks = billTasks)
+                _state.value = _state.value.copy(billTasks = billTasks)
+                Log.d("TaskFinishedVM", "Bill tasks: ${billTasks.size}")
             }
         }
     }
 
-    fun getfoodTasks() {
+    /**
+     * Fetches food tasks and updates the state.
+     */
+    fun getFoodTasks() {
         viewModelScope.launch {
             repository.getAllTasks().collectLatest { tasks ->
                 val foodTasks = tasks.filter { it.course == "food" && it.isFinished }
-                state = state.copy(foodTasks = foodTasks)
+                _state.value = _state.value.copy(foodTasks = foodTasks)
+                Log.d("TaskFinishedVM", "Food tasks: ${foodTasks.size}")
             }
         }
     }
 
-    fun getmedicationTasks() {
+    /**
+     * Fetches medication tasks and updates the state.
+     */
+    fun getMedicationTasks() {
         viewModelScope.launch {
             repository.getAllTasks().collectLatest { tasks ->
                 val medicationTasks = tasks.filter { it.course == "medication" && it.isFinished }
-                state = state.copy(medicationTasks = medicationTasks)
+                _state.value = _state.value.copy(medicationTasks = medicationTasks)
+                Log.d("TaskFinishedVM", "Medication tasks: ${medicationTasks.size}")
             }
         }
     }
 
-    fun getmeetingTasks() {
+    /**
+     * Fetches meeting tasks and updates the state.
+     */
+    fun getMeetingTasks() {
         viewModelScope.launch {
             repository.getAllTasks().collectLatest { tasks ->
                 val meetingTasks = tasks.filter { it.course == "meeting" && it.isFinished }
-                state = state.copy(meetingTasks = meetingTasks)
+                _state.value = _state.value.copy(meetingTasks = meetingTasks)
+                Log.d("TaskFinishedVM", "Meeting tasks: ${meetingTasks.size}")
             }
         }
     }
 
+    /**
+     * Fetches all tasks and updates the state.
+     */
     private fun getTasks() {
         viewModelScope.launch {
             repository.getAllTasks().collectLatest { tasks ->
-                state = state.copy(tasks = tasks)
+                _state.value = _state.value.copy(tasks = tasks)
+                Log.d("TaskFinishedVM", "All tasks: ${tasks.size}")
             }
         }
     }
 
+    /**
+     * Assigns a task for deletion.
+     *
+     * @param task The task to be assigned for deletion.
+     */
     fun assignTaskForDeletion(task: Task) {
-        state = state.copy(taskForDeletion = task)
+        _state.value = _state.value.copy(taskForDeletion = task)
     }
 
+    /**
+     * Opens the delete confirmation dialog.
+     */
     fun openDeleteDialog() {
-        state = state.copy(openDeleteDialog = true)
+        _state.value = _state.value.copy(openDeleteDialog = true)
     }
 
+    /**
+     * Closes the delete confirmation dialog.
+     */
     fun closeDeleteDialog() {
-        state = state.copy(openDeleteDialog = false)
+        _state.value = _state.value.copy(openDeleteDialog = false)
     }
 
+    /**
+     * Confirms the deletion of a task and updates the state.
+     */
     fun confirmDeletion() {
         viewModelScope.launch {
-            val taskForDeletion = state.taskForDeletion
+            val taskForDeletion = _state.value.taskForDeletion
             repository.deleteTask(taskForDeletion)
 
-            state = state.copy(
-                billTasks = state.billTasks - taskForDeletion,
-                medicationTasks = state.medicationTasks - taskForDeletion,
-                foodTasks = state.foodTasks - taskForDeletion,
-                meetingTasks = state.meetingTasks - taskForDeletion,
-                otherTasks = state.otherTasks - taskForDeletion,
+            _state.value = _state.value.copy(
+                billTasks = _state.value.billTasks - taskForDeletion,
+                medicationTasks = _state.value.medicationTasks - taskForDeletion,
+                foodTasks = _state.value.foodTasks - taskForDeletion,
+                meetingTasks = _state.value.meetingTasks - taskForDeletion,
+                otherTasks = _state.value.otherTasks - taskForDeletion,
                 confirmDelete = false
             )
 
-            state = state.copy(confirmDelete = true)
+            _state.value = _state.value.copy(confirmDelete = true)
 
             closeDeleteDialog()
         }
     }
 
+    /**
+     * Denies the deletion of a task.
+     */
     fun denyDeletion() {
-        state = state.copy(confirmDelete = false)
+        _state.value = _state.value.copy(confirmDelete = false)
     }
 }
 
+/**
+ * Data class representing the UI state for the finished tasks screen.
+ */
 data class FinishedTasksUiState(
     val tasks: List<Task> = emptyList(),
     val billTasks: List<Task> = emptyList(),

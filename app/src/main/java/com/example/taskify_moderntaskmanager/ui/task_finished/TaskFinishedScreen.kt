@@ -1,5 +1,6 @@
 package com.example.taskify_moderntaskmanager.ui.task_finished
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -10,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -36,14 +39,22 @@ object TaskifyFinishedDestination : NavigationDestination {
  * @param onRequestDetails Callback to handle requesting details for a task.
  */
 @Composable
-fun TaskifyFinishedScreen(
+fun TaskFinishedScreen(
     modifier: Modifier = Modifier,
     onRequestDetails: (Int) -> Unit
 ) {
-    val viewModel = viewModel(modelClass = TaskifyFinishedViewModel::class.java)
-    val finishedTasksUiState = viewModel.state
+    // Obtain the ViewModel instance
+    val viewModel: TaskFinishedViewModel = viewModel(TaskFinishedViewModel::class.java)
+    // Observe the UI state from the ViewModel
+    val finishedTasksUiState by viewModel.state.collectAsState()
+
+    // Log the size of bill tasks for debugging purposes
+    Log.d("TaskFinishedScreen", "UI State: ${finishedTasksUiState.billTasks.size} bill tasks")
+
+    // Get the current context
     val context = LocalContext.current
 
+    // Show a toast message when a task is successfully deleted
     if (finishedTasksUiState.confirmDelete) {
         Toast.makeText(context, "Task deleted successfully!", Toast.LENGTH_SHORT).show()
         viewModel.denyDeletion()
@@ -80,7 +91,73 @@ fun TaskifyFinishedScreen(
                 }
             }
 
-            // More categories...
+            // Category: Food
+            item {
+                SectionHeader(text = "Food :")
+            }
+            item {
+                if (finishedTasksUiState.foodTasks.isEmpty()) {
+                    EmptyTasksText()
+                } else {
+                    TaskList(
+                        tasks = finishedTasksUiState.foodTasks,
+                        viewModel = viewModel,
+                        modifier = modifier,
+                        onRequestDetails = onRequestDetails
+                    )
+                }
+            }
+
+            // Category: Meetings
+            item {
+                SectionHeader(text = "Meetings :")
+            }
+            item {
+                if (finishedTasksUiState.meetingTasks.isEmpty()) {
+                    EmptyTasksText()
+                } else {
+                    TaskList(
+                        tasks = finishedTasksUiState.meetingTasks,
+                        viewModel = viewModel,
+                        modifier = modifier,
+                        onRequestDetails = onRequestDetails
+                    )
+                }
+            }
+
+            // Category: Medication
+            item {
+                SectionHeader(text = "Medication :")
+            }
+            item {
+                if (finishedTasksUiState.medicationTasks.isEmpty()) {
+                    EmptyTasksText()
+                } else {
+                    TaskList(
+                        tasks = finishedTasksUiState.medicationTasks,
+                        viewModel = viewModel,
+                        modifier = modifier,
+                        onRequestDetails = onRequestDetails
+                    )
+                }
+            }
+
+            // Category: Other
+            item {
+                SectionHeader(text = "Other :")
+            }
+            item {
+                if (finishedTasksUiState.otherTasks.isEmpty()) {
+                    EmptyTasksText()
+                } else {
+                    TaskList(
+                        tasks = finishedTasksUiState.otherTasks,
+                        viewModel = viewModel,
+                        modifier = modifier,
+                        onRequestDetails = onRequestDetails
+                    )
+                }
+            }
 
         }
 
@@ -137,7 +214,7 @@ private fun EmptyTasksText() {
 @Composable
 private fun TaskList(
     tasks: List<Task>,
-    viewModel: TaskifyFinishedViewModel,
+    viewModel: TaskFinishedViewModel,
     modifier: Modifier,
     onRequestDetails: (Int) -> Unit
 ) {
