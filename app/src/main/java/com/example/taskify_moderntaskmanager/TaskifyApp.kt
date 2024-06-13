@@ -40,13 +40,12 @@ import com.exyte.animatednavbar.utils.noRippleClickable
  *
  * This function sets up the navigation bar, animations, and main content of the application.
  *
+ * @param modifier Modifier to be applied to the Scaffold.
  * @param navController The navigation controller responsible for managing navigation within the app.
  */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Modifier.TaskifyApp(
-    navController: NavHostController = rememberNavController()
-) {
+fun TaskifyApp(modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()) {
     // List of routes for the bottom navigation bar
     val bottomBarList = listOf(
         HomeDestination.route,
@@ -59,9 +58,11 @@ fun Modifier.TaskifyApp(
 
     // Scaffold with AnimatedNavigationBar for bottom navigation
     Scaffold(
+        modifier = modifier,
         bottomBar = {
             AnimatedNavigationBar(
-                modifier = height(54.dp)
+                modifier = Modifier
+                    .height(54.dp)
                     .padding(bottom = 6.dp, start = 6.dp, end = 6.dp),
                 selectedIndex = selectedIndex,
                 cornerRadius = shapeCornerRadius(cornerRadius = 34.dp),
@@ -73,7 +74,8 @@ fun Modifier.TaskifyApp(
                 // Create bottom navigation items for each route
                 bottomBarList.forEachIndexed { index, route ->
                     Box(
-                        modifier = background(Color(0xFF320064))
+                        modifier = Modifier
+                            .background(Color(0xFF320064))
                             .fillMaxSize()
                             .noRippleClickable {
                                 selectedIndex = index
@@ -82,7 +84,7 @@ fun Modifier.TaskifyApp(
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            modifier = size(26.dp),
+                            modifier = Modifier.size(26.dp),
                             imageVector = when (route) {
                                 HomeDestination.route -> Icons.Default.Home
                                 TaskifyFinishedDestination.route -> Icons.Default.CheckCircle

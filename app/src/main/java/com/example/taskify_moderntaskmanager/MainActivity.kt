@@ -18,24 +18,37 @@ import com.example.taskify_moderntaskmanager.ui.theme.TaskifyModernTaskManagerTh
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * MainActivity is the entry point of the Taskify Modern Task Manager application.
+ *
+ * This activity sets up the content view and applies the application theme.
+ * It also enables edge-to-edge display and initializes the main composable function.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Enable edge-to-edge display
         enableEdgeToEdge()
+        // Set the content view using Compose
         setContent {
             TaskifyModernTaskManagerTheme {
+                // State to show a loader initially
                 var showLoader by remember { mutableStateOf(true) }
+
+                // Launch a coroutine to hide the loader after 3 seconds
                 LaunchedEffect(Unit) {
                     lifecycleScope.launch {
-                        delay(3000) //Showing loader for 3 seconds
+                        delay(3000) // Showing loader for 3 seconds
                         showLoader = false
                     }
                 }
+
+                // Show the loader or the main content based on the state
                 if (showLoader) {
                     Loader()
                 } else {
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        Modifier.padding(innerPadding).TaskifyApp()
+                        TaskifyApp(modifier = Modifier.padding(innerPadding))
                     }
                 }
             }
